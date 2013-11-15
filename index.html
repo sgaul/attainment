@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Educational attainment</title>
+    <link rel="stylesheet" href="libraries/frameworks/minimal/stylesheets/styles.css">
+    <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <link rel=stylesheet href="libraries/widgets/nvd3/css/nv.d3.css"></link>
+<link rel=stylesheet href="libraries/widgets/nvd3/css/rNVD3.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+    <script src="libraries/widgets/nvd3/js/jquery-1.8.2.min.js"></script>
+<script src="libraries/widgets/nvd3/js/d3.v3.min.js"></script>
+<script src="libraries/widgets/nvd3/js/nv.d3.min-new.js"></script>
+<script src="libraries/widgets/nvd3/js/fisheye.js"></script>
+
+  </head>
+  <body>
+    <div class="wrapper">
+<header>
+  <h1>Educational attainment</h1>
+  <p>Hartford regional data and indicators</p>
+    <ol>
+    </ol>
+</header>
+
+      <section>
+        <h2>Educational attainment indicators</h2>
+<p>This section covers indicators related to the educational attainment of Hartford area residents. </p>
+
+<h2>Data and limitations</h2>
+
+<p>Data on educational attainment typically comes from the U.S. Census Bureau&#39;s American Community Survey (ACS). This means that data is available with town or neighborhood-level detail, but only by combining several years of samples (3 to 5), making trend analysis difficult. </p>
+
+<p>The ACS does provide several breakouts for educational attainment - by age, by whether the individual is employed / unemployed, by nativity (US or foreign-born), etc. - although the margin of error for these subgroups increases the smaller the group. </p>
+
+<p>The ACS provides several levels of educational attainment; most indicator reports look at high-school diploma and college degree. The <a href="http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_12_1YR_B23006&amp;prodType=table">four standard levels</a> though are: </p>
+
+<ul>
+<li>Less than high school graduate</li>
+<li>High school graduate</li>
+<li>Some college or associate&#39;s degree</li>
+<li>Bachelor&#39;s degree or higher</li>
+</ul>
+
+<h2>What do we already know?</h2>
+
+<p>Educational attainment rates are among the most frequently-used indicators in local and national reports. Below are references for some, with details on how the data is used. </p>
+
+<h3>Local</h3>
+
+<ul>
+<li><a href="http://www.ctdol.state.ct.us/OWC/CETC/2013ReportCard.pdf">CETC Report Card</a> includes the percent graduating 2 - 4 year schools with STEM degrees. </li>
+<li><a href="http://www.ctfairhousing.org/people-place-and-opportunity-report/">CT Fair Housing Center Opportunity Mapping</a> includes &#39;% of population over 25 with college degree&#39; (including associate&#39;s degrees) as a component of their opportunity index. </li>
+<li><a href="http://www.capitalworkforce.org/ctworks/documents/Community_Workforce_Development_Report_Card_2011ff.pdf">CWP Community Workforce Development Report Card</a> included both the &#39;% of residents 25+ with high school diploma&#39; and a separate indicator on the percent of STEM degrees conferred by Connecticut public colleges and universities. </li>
+<li><a href="http://courantblogs.com/cityline/wp-content/uploads/2013/04/Hartford-Neighborhood-Assessment.pdf">Hartford Neighborhood Assessments</a> looked at adults with high-school degree and a college-degree as measures of neighborhood well-being. </li>
+<li><a href="http://www.cadh.org/health-equity/health-equity-index.html">Health Equity Index</a> includes the &#39;Percent of adults with at least a bachelor&#39;s degree&#39; as a component.<br></li>
+<li><a href="http://www.ct.gov/opm/cwp/view.asp?a=2998&amp;Q=490946">Population Results Working Group</a> cites both the % of adults with a college degree and the % with a post-secondary education as indicators to track for the state. </li>
+<li><a href="http://www.cahs.org/programs-opportunitieshartford.asp">Opportunities Hartford</a> includes the number of Certificates and Associates Degrees awarded by Community Colleges as an indicator, which would be part of looking at attainment of college and associate&#39;s degrees. </li>
+<li><a href="http://www.ctvoices.org/">CT Voices for Children</a> plans to include % of population over 25 with college degree as an indicator of child well-being for the Hartford region.</li>
+<li><a href="http://www.ctdatahaven.org/communityindex">Data Haven&#39;s Community Well-Being Index</a> includes the percent of adults with high-school degrees, bachelor&#39;s degrees and the percentmoving to the area from out-of-state or abroad who have a graduate or professional degree as well-being indicators. </li>
+</ul>
+
+<h3>Other relevant efforts</h3>
+
+<ul>
+<li><a href="http://www.bostonindicators.org/">Boston Indicators Project</a> looks at the numbers of associates degrees awarded as well as those awarded by community colleges and public higher education. </li>
+<li><a href="http://fcd-us.org/our-work/child-well-being-index-cwi">The Child Well-Being Index</a> includes both bachelor&#39;s and high-school degree attainment rates among it&#39;s &#39;Community Engagement&#39; indicators.</li>
+<li><a href="https://data.cityofchicago.org/Health-Human-Services/hardship-index/792q-4jtu">Chicago Deparment of Public Health</a> includes the percent of adults with a high-school diploma as one factors in their &#39;Hardship index&#39; (originally developed via the Rockefeller Institute).</li>
+<li><a href="http://www.measureofamerica.org/human-development/">The American Human Development Index (HDI)</a> includes educational attainment as one of three factors, looking at bachelor&#39;s and graduate degrees and high-school diplomas for the population. </li>
+<li><a href="http://www.futurefundneo.org/whatmatters">What Matters to Metros</a> includes the percent of the population with: post-graduate (advanced) degrees, with bachelor&#39;s degrees born outside the United States (&#39;international talent&#39;) and the share of STEM degrees among overall degrees as key factors for metro areas.</li>
+</ul>
+
+<h2>Sample results</h2>
+
+<p>The sample results are for all towns in Hartford and Tolland Counties since it is easier to extract ACS data that way. This can be trimmed to a smaller region later though. </p>
+
+<p>By town, Hartford has the highest percent of individuals with less than a high-school education - almost 30 percent of the adult population. New Britain, East Hartford and Somers have rates that are also significantly higher than the surrounding towns. Most other towns in the region have fewer than 10 percent of adults with less than a high-school education. </p>
+
+<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+<p>Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. In practice, this means we cannot effectively distinguish the levels for many towns in the region, especially small towns. </p>
+
+<p><img src="assets/fig/unnamed-chunk-2.png" alt="plot of chunk unnamed-chunk-2"> </p>
+
+<p>The next category are those with a high-school degree only. Here, some rural towns have high rates - Union, Stafford and Windsor Locks have the highest rates in the region (although with high margins of error).</p>
+
+<p><img src="assets/fig/unnamed-chunk-3.png" alt="plot of chunk unnamed-chunk-3"> </p>
+
+<p>Those with some college education or an associate&#39;s degree are the next group, again with high rates in some rural and suburban towns. </p>
+
+<p><img src="assets/fig/unnamed-chunk-4.png" alt="plot of chunk unnamed-chunk-4"> </p>
+
+<p>The percent with a bachelor&#39;s degree or higher is highest in the more affluent towns in the region - Avon, Simsbury, West Hartford, Glastonbury and Farmington all have above 60 percent of adults with a bachelor&#39;s degree. Hartford, by comparison, has fewer than 15 percent of adults with a bachelor&#39;s degree.  </p>
+
+<p><img src="assets/fig/unnamed-chunk-5.png" alt="plot of chunk unnamed-chunk-5"> </p>
+
+<p>The ACS data can be looked at by neighborhood (for 5-year estimates); below are maps of the region for those with a bachelor&#39;s degree and those with less than a high-school education. </p>
+
+<p><img src="assets/fig/unnamed-chunk-6.png" alt="plot of chunk unnamed-chunk-6"> </p>
+
+<p>Adults with a bachelor&#39;s degree or higher; the map shows some more detail than by town (for instance, most college-educated adults in Hartford live downtown). </p>
+
+<p><img src="assets/fig/unnamed-chunk-7.png" alt="plot of chunk unnamed-chunk-7"> </p>
+
+      </section>
+      <footer>
+        <p>Maintained by <a href="http://github.com/">
+          Scott Gaul
+        </a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by 
+          <a href="https://github.com/orderedlist">orderedlist</a></small>
+        </p>
+      </footer>    </div>
+    <script src="libraries/frameworks/minimal/javascripts/scale.fix.js"></script>
+  </body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

@@ -1,0 +1,225 @@
+---
+title       : Educational attainment
+subtitle    : Hartford regional data and indicators
+author      : Scott Gaul
+job         : Community Indicators Project
+framework   : minimal        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+ext_widgets : {rCharts: ["libraries/nvd3"]} 
+mode        : selfcontained # {standalone, draft}
+---
+
+## Educational attainment indicators
+
+This section covers indicators related to the educational attainment of Hartford area residents. 
+
+## Data and limitations
+
+Data on educational attainment typically comes from the U.S. Census Bureau's American Community Survey (ACS). This means that data is available with town or neighborhood-level detail, but only by combining several years of samples (3 to 5), making trend analysis difficult. 
+
+The ACS does provide several breakouts for educational attainment - by age, by whether the individual is employed / unemployed, by nativity (US or foreign-born), etc. - although the margin of error for these subgroups increases the smaller the group. 
+
+The ACS provides several levels of educational attainment; most indicator reports look at high-school diploma and college degree. The [four standard levels](http://factfinder2.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ACS_12_1YR_B23006&prodType=table) though are: 
+* Less than high school graduate
+* High school graduate
+* Some college or associate's degree
+* Bachelor's degree or higher
+
+## What do we already know?
+
+Educational attainment rates are among the most frequently-used indicators in local and national reports. Below are references for some, with details on how the data is used. 
+
+### Local
+
+* [CETC Report Card](http://www.ctdol.state.ct.us/OWC/CETC/2013ReportCard.pdf) includes the percent graduating 2 - 4 year schools with STEM degrees. 
+* [CT Fair Housing Center Opportunity Mapping](http://www.ctfairhousing.org/people-place-and-opportunity-report/) includes '% of population over 25 with college degree' (including associate's degrees) as a component of their opportunity index. 
+* [CWP Community Workforce Development Report Card](http://www.capitalworkforce.org/ctworks/documents/Community_Workforce_Development_Report_Card_2011ff.pdf) included both the '% of residents 25+ with high school diploma' and a separate indicator on the percent of STEM degrees conferred by Connecticut public colleges and universities. 
+* [Hartford Neighborhood Assessments](http://courantblogs.com/cityline/wp-content/uploads/2013/04/Hartford-Neighborhood-Assessment.pdf) looked at adults with high-school degree and a college-degree as measures of neighborhood well-being. 
+* [Health Equity Index](http://www.cadh.org/health-equity/health-equity-index.html) includes the 'Percent of adults with at least a bachelor's degree' as a component.   
+* [Population Results Working Group](http://www.ct.gov/opm/cwp/view.asp?a=2998&Q=490946) cites both the % of adults with a college degree and the % with a post-secondary education as indicators to track for the state. 
+* [Opportunities Hartford](http://www.cahs.org/programs-opportunitieshartford.asp) includes the number of Certificates and Associates Degrees awarded by Community Colleges as an indicator, which would be part of looking at attainment of college and associate's degrees. 
+* [CT Voices for Children](http://www.ctvoices.org/) plans to include % of population over 25 with college degree as an indicator of child well-being for the Hartford region.
+* [Data Haven's Community Well-Being Index](http://www.ctdatahaven.org/communityindex) includes the percent of adults with high-school degrees, bachelor's degrees and the percentmoving to the area from out-of-state or abroad who have a graduate or professional degree as well-being indicators. 
+
+### Other relevant efforts
+
+* [Boston Indicators Project](http://www.bostonindicators.org/) looks at the numbers of associates degrees awarded as well as those awarded by community colleges and public higher education. 
+* [The Child Well-Being Index](http://fcd-us.org/our-work/child-well-being-index-cwi) includes both bachelor's and high-school degree attainment rates among it's 'Community Engagement' indicators.
+* [Chicago Deparment of Public Health](https://data.cityofchicago.org/Health-Human-Services/hardship-index/792q-4jtu) includes the percent of adults with a high-school diploma as one factors in their 'Hardship index' (originally developed via the Rockefeller Institute).
+* [The American Human Development Index (HDI)](http://www.measureofamerica.org/human-development/) includes educational attainment as one of three factors, looking at bachelor's and graduate degrees and high-school diplomas for the population. 
+* [What Matters to Metros](http://www.futurefundneo.org/whatmatters) includes the percent of the population with: post-graduate (advanced) degrees, with bachelor's degrees born outside the United States ('international talent') and the share of STEM degrees among overall degrees as key factors for metro areas.
+
+## Sample results
+
+The sample results are for all towns in Hartford and Tolland Counties since it is easier to extract ACS data that way. This can be trimmed to a smaller region later though. 
+
+By town, Hartford has the highest percent of individuals with less than a high-school education - almost 30 percent of the adult population. New Britain, East Hartford and Somers have rates that are also significantly higher than the surrounding towns. Most other towns in the region have fewer than 10 percent of adults with less than a high-school education. 
+
+
+```{r echo = FALSE,warning = FALSE,message = FALSE, fig.width = 10, comment = NA, tidy = F}
+library(ggplot2)
+library(acs)
+library(maps)
+library(maptools)
+key = "ba67d3a427e1f785987b9c8bc59341bf7c8a7cc1"
+api.key.install(key)
+#hartford.towns = geo.make(state = "CT", county = c("Hartford","Tolland"), county.subdivision = "*", check = T)
+B23006 = acs.fetch(geography = hartford.towns, table.number = "B23006", col.names = "pretty")
+nohs.estimate = divide.acs(numerator=B23006[,2],denominator=B23006[,1],
+                           method = 'proportion')
+hsgrad.estimate = divide.acs(numerator=B23006[,9],denominator=B23006[,1],
+                           method = 'proportion')
+somecollege.estimate = divide.acs(numerator=B23006[,16],denominator=B23006[,1],
+                           method = 'proportion')
+bachelors.estimate = divide.acs(numerator=B23006[,23],denominator=B23006[,1],
+                           method = 'proportion')
+
+attainment = data.frame(town=geography(B23006)[[1]],
+                        nohs=as.numeric(estimate(nohs.estimate)),
+                        se.nohs=standard.error(nohs.estimate), 
+                        hsgrad=as.numeric(estimate(hsgrad.estimate)),
+                        se.hsgrad=standard.error(hsgrad.estimate),
+                        somecollege=as.numeric(estimate(somecollege.estimate)),
+                        se.somecollege=standard.error(somecollege.estimate),
+                        bachelors=as.numeric(estimate(bachelors.estimate)),
+                        se.bachelors=standard.error(bachelors.estimate))
+names(attainment) <- c("town","nohs","se.nohs","hsgrad","se.hsgrad",
+                       "somecollege","se.somecollege","bachelors","se.bachelors")
+attainment$town= gsub(" town, Tolland County, Connecticut", "", attainment$town)
+attainment$town= gsub(" town, Hartford County, Connecticut", "", attainment$town)
+#Merge with data
+library(classInt)
+jenks <- classIntervals(attainment$nohs, n=4, style="fisher")
+choropleth=merge(CTTowns, attainment, by.x = "id", by.y="town")
+choropleth=choropleth[order(choropleth$order), ]
+choropleth$nohs=cut(choropleth$nohs, breaks=jenks$brks, include.lowest=T, dig.lab = T)
+#Make the map
+ggplot(data = choropleth, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = nohs)) + 
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = NULL, y = NULL) + 
+  coord_equal() +
+  geom_polygon(data = CTTowns, colour = "grey", alpha = 0.5, fill = NA) +
+  scale_fill_brewer(palette = "Purples", name = "No high\nschool degree") +
+  theme_minimal()
+```
+
+Since the data is drawn from the ACS, there are margins of error associated with the values, which can be large for small towns. In practice, this means we cannot effectively distinguish the levels for many towns in the region, especially small towns. 
+
+```{r echo = FALSE, warning = FALSE, fig.height = 9, message = FALSE}
+attainment$town <- reorder(attainment$town, attainment$nohs)
+library(scales)
+ggplot(data = attainment) + 
+  geom_point(aes(x = nohs, y = town)) + 
+  geom_segment(aes(xend = nohs - se.nohs, x = nohs + se.nohs, y = town, yend = town), colour = "grey") + 
+  labs(x = '% of adults with less than high school diploma', y = NULL) + 
+  scale_x_continuous(labels = percent) + 
+  theme_minimal()
+```
+
+The next category are those with a high-school degree only. Here, some rural towns have high rates - Union, Stafford and Windsor Locks have the highest rates in the region (although with high margins of error).
+
+```{r echo = FALSE, warning = FALSE, fig.height = 9, message = FALSE}
+attainment$town <- reorder(attainment$town, attainment$hsgrad)
+ggplot(data = attainment) + 
+  geom_point(aes(x = hsgrad, y = town)) + 
+  geom_segment(aes(xend = hsgrad - se.hsgrad, x = hsgrad + se.hsgrad, 
+                   y = town, yend = town), colour = "grey") + 
+  labs(x = '% of adults with high school diploma only', y = NULL) + 
+  scale_x_continuous(labels = percent) + 
+  theme_minimal()
+```
+
+Those with some college education or an associate's degree are the next group, again with high rates in some rural and suburban towns. 
+
+
+```{r echo = FALSE, warning = FALSE, fig.height = 9, message = FALSE}
+attainment$town <- reorder(attainment$town, attainment$somecollege)
+ggplot(data = attainment) + 
+  geom_point(aes(x = somecollege, y = town)) + 
+  geom_segment(aes(xend = somecollege - se.somecollege, 
+                   x = somecollege + se.somecollege, 
+                   y = town, yend = town), colour = "grey") + 
+  labs(x = '% of adults with some college or an associates degree', y = NULL) + 
+  scale_x_continuous(labels = percent) + 
+  theme_minimal()
+```
+
+The percent with a bachelor's degree or higher is highest in the more affluent towns in the region - Avon, Simsbury, West Hartford, Glastonbury and Farmington all have above 60 percent of adults with a bachelor's degree. Hartford, by comparison, has fewer than 15 percent of adults with a bachelor's degree.  
+
+```{r echo = FALSE, warning = FALSE, fig.height = 9, message = FALSE}
+attainment$town <- reorder(attainment$town, attainment$bachelors)
+ggplot(data = attainment) + 
+  geom_point(aes(x = bachelors, y = town)) + 
+  geom_segment(aes(xend = bachelors - se.bachelors, 
+                   x = bachelors + se.bachelors, 
+                   y = town, yend = town), colour = "grey") + 
+  labs(x = '% of adults with bachelors degree or higher', y = NULL) + 
+  scale_x_continuous(labels = percent) + 
+  theme_minimal()
+```
+
+The ACS data can be looked at by neighborhood (for 5-year estimates); below are maps of the region for those with a bachelor's degree and those with less than a high-school education. 
+
+```{r echo = FALSE,warning = FALSE,message = FALSE,fig.width = 10, fig.height = 10, comment = NA, tidy = F}
+#hartford.tracts = geo.make(state = "CT", county = c("Hartford","Tolland"), tract = "*", check = T)
+B23006 = acs.fetch(geography = hartford.tracts, table.number = "B23006", col.names = "pretty")
+nohs.estimate.tract = divide.acs(numerator=B23006[,2],denominator=B23006[,1],
+                           method = 'proportion')
+bachelors.estimate.tract = divide.acs(numerator=B23006[,23],denominator=B23006[,1],
+                           method = 'proportion')
+attainment.tract = data.frame(town=geography(B23006)[[1]],
+                        nohs=as.numeric(estimate(nohs.estimate.tract)),
+                        se.nohs=standard.error(nohs.estimate.tract), 
+                        bachelors=as.numeric(estimate(bachelors.estimate.tract)),
+                        se.bachelors=standard.error(bachelors.estimate.tract))
+names(attainment.tract) <- c("tract","nohs","se.nohs","bachelors","se.bachelors")
+attainment.tract$tract= gsub("Census Tract ", "", attainment.tract$tract)
+attainment.tract$tract= gsub(", Tolland County, Connecticut", "", 
+                             attainment.tract$tract)
+attainment.tract$tract= gsub(", Hartford County, Connecticut", "", 
+                             attainment.tract$tract)
+#Merge with data
+jenks <- classIntervals(attainment.tract$nohs, n=4, style="fisher")
+#Make map
+choropleth=merge(CTTracts, attainment.tract, by.x = "id", by.y="tract")
+choropleth=choropleth[order(choropleth$order), ]
+choropleth$nohs=cut(choropleth$nohs,breaks=jenks$brks, 
+                         include.lowest=T, dig.lab = T)
+#Make the map
+ggplot(data = choropleth, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = nohs)) + 
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = NULL, y = NULL) + 
+  coord_equal() +
+  geom_polygon(data = CTTowns, colour = "grey", alpha = 0.5, fill = NA) +
+  scale_fill_brewer(palette = "Purples", name = "Less than\nHS degree") +
+  theme_minimal()
+```
+
+Adults with a bachelor's degree or higher; the map shows some more detail than by town (for instance, most college-educated adults in Hartford live downtown). 
+
+```{r echo = FALSE,warning = FALSE,message = FALSE,fig.width = 10, fig.height = 10, comment = NA, tidy = F}
+#Merge with data
+jenks <- classIntervals(attainment.tract$bachelors, n=4, style="fisher")
+#Make map
+choropleth=merge(CTTracts, attainment.tract, by.x = "id", by.y="tract")
+choropleth=choropleth[order(choropleth$order), ]
+choropleth$bachelors=cut(choropleth$bachelors,breaks=jenks$brks, 
+                         include.lowest=T, dig.lab = T)
+#Make the map
+ggplot(data = choropleth, aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = bachelors)) + 
+  scale_x_continuous(breaks = NULL) +
+  scale_y_continuous(breaks = NULL) +
+  labs(x = NULL, y = NULL) + 
+  coord_equal() +
+  geom_polygon(data = CTTowns, colour = "grey", fill = NA) +
+  scale_fill_brewer(palette = "Purples", name = "Bachelors\n degree") +
+  theme_minimal()
+```
+
+
